@@ -12,9 +12,32 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
 
+app.use(express.urlencoded)
+
+const pets = [
+	{
+		name: "Scout",
+		image: "cute-dog.jpg",
+		superpower: "paws"
+	},
+	{
+		name: "Toby",
+		image: "cute-cat.jpg",
+		superpower: "eyes" 
+	}
+]
+
+const votes = [];
 
 app.get('/', function(req, res) {
-	res.render('home');
+	res.render('home', { pets, votes });
+});
+
+app.post("/vote", (req, res) => {
+	console.log(req.body);
+	votes.push({...req.body, ip: req.ip});
+	console.log(votes);
+	res.redirect('/');
 });
 
 // 404 catch-all handler (middleware)
